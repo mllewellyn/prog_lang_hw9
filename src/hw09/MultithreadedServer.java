@@ -54,23 +54,19 @@ class Task {
     }
 
     private int parseAccountOrNum(String name) {
-        int rtn;
-
         if (name.charAt(0) >= '0' && name.charAt(0) <= '9') {
-            rtn = new Integer(name).intValue();
+            return Integer.parseInt(name);
         } else {
-            rtn = parseAccount(name).peek();
+            return parseAccount(name).peek();
         }
-
-        return rtn;
     }
 
     public void run() {
         // tokenize transaction
         String[] commands = transaction.split(";");
 
-        for (int i = 0; i < commands.length; i++) {
-            String[] words = commands[i].trim().split("\\s");
+        for (String command : commands) {
+            String[] words = command.trim().split("\\s");
 
             if (words.length < 3)
                 throw new InvalidTransactionError();
@@ -82,11 +78,11 @@ class Task {
 
             int rhs = parseAccountOrNum(words[2]);
 
-            for (int j = 3; j < words.length; j+=2) {
+            for (int j = 3; j < words.length; j += 2) {
                 if (words[j].equals("+"))
-                    rhs += parseAccountOrNum(words[j+1]);
+                    rhs += parseAccountOrNum(words[j + 1]);
                 else if (words[j].equals("-"))
-                    rhs -= parseAccountOrNum(words[j+1]);
+                    rhs -= parseAccountOrNum(words[j + 1]);
                 else
                     throw new InvalidTransactionError();
             }
