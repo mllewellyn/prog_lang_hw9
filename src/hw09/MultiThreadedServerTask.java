@@ -9,14 +9,6 @@ class MultiThreadedServerTask implements Runnable {
     private Account[] allAccounts;
     private String transaction;
 
-    // TO DO: The sequential version of Task peeks at accounts
-    // whenever it needs to get a value, and opens, updates, and closes
-    // an account whenever it needs to set a value.  This won't work in
-    // the parallel version.  Instead, you'll need to cache values
-    // you've read and written, and then, after figuring out everything
-    // you want to do, (1) open all accounts you need, for reading,
-    // writing, or both, (2) verify all previously peeked-at values,
-    // (3) perform all updates, and (4) close all opened accounts.
 
     public MultiThreadedServerTask(Account[] allAccounts, String trans) {
         account_caches = new AccountCache[allAccounts.length];

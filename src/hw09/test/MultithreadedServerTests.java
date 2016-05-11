@@ -73,16 +73,6 @@ public class MultithreadedServerTests extends TestCase {
 
     }
 
-//	@Test
-//	public void testTinyRotate() throws IOException {
-//		verify_results_with_single_threaded_server(TEST_FILE_PREFIX+"hw09/data/tiny_rotate");
-//	}
-
-//	@Test
-//	public void testRotate() throws IOException {
-//		verify_results_with_single_threaded_server(TEST_FILE_PREFIX+"hw09/data/rotate");
-//	}
-
 	@Test
 	public void testSmallIncrement() throws IOException {
 		verify_results_with_single_threaded_server(TEST_FILE_PREFIX+"hw09/data/small_increment");
