@@ -6,6 +6,7 @@ public class AccountCache {
     int current_value;
     boolean isRead = false;
     boolean isWritten = false;
+    boolean isOpen = false;
 
     public AccountCache(Account act) {
         this.act = act;
@@ -22,29 +23,34 @@ public class AccountCache {
     // verify the account with the current value
     public void verify() throws TransactionAbortException {
         if (isRead) {
-            this.act.verify(this.current_value);
+            act.verify(initial_value);
         }
     }
 
     // open account to read or write as necessary
-    public boolean open_if_needed() throws TransactionAbortException {
+    public void open_if_needed() throws TransactionAbortException {
         try {
             if (isRead) {
-                this.act.open(false);
+                act.open(false);
+                isOpen = true;
             }
             if (isWritten) {
-                this.act.open(true);
+                act.open(true);
+                isOpen = true;
             }
-        } catch (TransactionUsageError e) { return false; }
-        return true;
+        } catch (TransactionUsageError e) {
+            System.out.println("Got a TransactionUsageError at open_if_needed");
+        }
     }
 
     // close account if open
-    public boolean close_if_open() {
-        try {
-            this.act.close();
-        } catch (TransactionUsageError e) { return false; }
-        return true;
+    public void close_if_open() {
+        if(isOpen)
+            try {
+                act.close();
+            } catch (TransactionUsageError e) {
+                System.out.println("Got a TransactionUsageError at close_if_open");
+            }
     }
 
     // update cache value

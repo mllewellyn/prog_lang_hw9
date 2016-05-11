@@ -99,6 +99,7 @@ class MultiThreadedServerTask implements Runnable {
         while(true) {
             // First thing we do is load the latest values of the accounts
             // into the caches
+            System.out.println("Loading accounts into cache.");
             load_accounts_into_cache();
 
             // now we execute the transaction on the cache
@@ -110,6 +111,7 @@ class MultiThreadedServerTask implements Runnable {
                     account_cache.open_if_needed();
                 }
             } catch (TransactionAbortException e) {
+                System.out.println("Failed to open an account");
                 // One of the accounts we wanted to open is currently open
                 // fail and go back to the beginning
                 close_accounts();
@@ -123,6 +125,7 @@ class MultiThreadedServerTask implements Runnable {
                     account_cache.verify();
                 }
             } catch (TransactionAbortException e) {
+                System.out.println("Failed to verify an account");
                 // One of the accounts we wanted to open is currently open
                 // fail and go back to the beginning
                 close_accounts();
@@ -135,7 +138,6 @@ class MultiThreadedServerTask implements Runnable {
 //                Character c = new Character((char) (i+'A'));
 //                System.out.println("Trying to update account "+c);
                 AccountCache account_cache = account_caches[i];
-
 
                 account_cache.update();
                 account_cache.close_if_open();

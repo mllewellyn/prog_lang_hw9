@@ -18,7 +18,7 @@ public class MultithreadedServer {
         BufferedReader input =
             new BufferedReader(new FileReader(inputFile));
 
-        int numThreads = 50;
+        int numThreads = 10;
         ExecutorService exec = Executors.newFixedThreadPool(numThreads);
 
         while ((line = input.readLine()) != null) {

@@ -47,8 +47,12 @@ public class MultithreadedServerTests extends TestCase {
 	private void verify_results_with_single_threaded_server(String test_file) throws IOException {
 		Account[] multi_accounts = initialize_accounts();
 		Account[] single_accounts = initialize_accounts();
-		MultithreadedServer.runServer(test_file, multi_accounts);
+
+		System.out.println("Running test on singlethreaded server.");
 		SinglethreadedServer.runServer(test_file, single_accounts);
+
+		System.out.println("Running test on multithreaded server.");
+		MultithreadedServer.runServer(test_file, multi_accounts);
 
 		for (int i = A; i <= Z; i++) {
 			Character c = new Character((char) (i+'A'));
@@ -56,10 +60,10 @@ public class MultithreadedServerTests extends TestCase {
 		}
 	}
 
-     @Test
-	 public void testIncrement() throws IOException {
+    @Test
+    public void testIncrement() throws IOException {
 		accounts = initialize_accounts();
-		MultithreadedServer.runServer("src/hw09/data/increment", accounts);
+		MultithreadedServer.runServer(TEST_FILE_PREFIX+"hw09/data/increment", accounts);
 	
 		// assert correct account values
 		for (int i = A; i <= Z; i++) {
@@ -67,11 +71,11 @@ public class MultithreadedServerTests extends TestCase {
 			assertEquals("Account "+c+" differs", Z-i+1, accounts[i].getValue());
 		}		
 
-	 }
+    }
 
 	@Test
 	public void testTinyRotate() throws IOException {
-		verify_results_with_single_threaded_server("src/hw09/data/tiny_rotate");
+		verify_results_with_single_threaded_server(TEST_FILE_PREFIX+"hw09/data/tiny_rotate");
 	}
 
 	@Test
