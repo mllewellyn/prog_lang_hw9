@@ -24,10 +24,7 @@ class MultiThreadedServerTask implements Runnable {
         transaction = trans;
     }
 
-    // TO DO: parseAccount currently returns a reference to an account.
-    // You probably want to change it to return a reference to an
-    // account *cache* instead.
-    //
+    // returns reference to AccountCache object
     private AccountCache parseAccount(String name) {
         int accountNum = (int) (name.charAt(0)) - (int) 'A';
 

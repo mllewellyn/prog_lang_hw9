@@ -53,5 +53,8 @@ public class AccountCache {
         }
     }
 
-
+    public void update_cache(int updated_value) {
+        isWritten = true;
+        this.current_value = updated_value;
+    }
 }
