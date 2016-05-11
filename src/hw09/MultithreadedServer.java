@@ -3,12 +3,13 @@ package hw09;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.*;
 
 // TO DO: Task is currently an ordinary class.
 // You will need to modify it to make it a task,
 // so it can be given to an Executor thread pool.
 //
-class Task {
+class Task implements Runnable{
     private static final int A = constants.A;
     private static final int Z = constants.Z;
     private static final int numLetters = constants.numLetters;
@@ -115,14 +116,22 @@ public class MultithreadedServer {
 
         // TO DO: you will need to create an Executor and then modify the
         // following loop to feed tasks to the executor instead of running them
-        // directly.  
+        // directly.
+        int numThreads = 4;
+        ExecutorService exec = Executors.newFixedThreadPool(numThreads);
 
         while ((line = input.readLine()) != null) {
             Task t = new Task(accounts, line);
-            t.run();
+
+            exec.execute(t);
+
+            //t.run();
         }
+        exec.shutdown();
+        try {
+            exec.awaitTermination(60,TimeUnit.SECONDS);
+        } catch(InterruptedException e) {}
         
         input.close();
-
     }
 }
