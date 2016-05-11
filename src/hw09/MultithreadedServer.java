@@ -114,9 +114,6 @@ public class MultithreadedServer {
         BufferedReader input =
             new BufferedReader(new FileReader(inputFile));
 
-        // TO DO: you will need to create an Executor and then modify the
-        // following loop to feed tasks to the executor instead of running them
-        // directly.
         int numThreads = 4;
         ExecutorService exec = Executors.newFixedThreadPool(numThreads);
 
@@ -127,6 +124,7 @@ public class MultithreadedServer {
 
             //t.run();
         }
+
         exec.shutdown();
         try {
             exec.awaitTermination(60,TimeUnit.SECONDS);
