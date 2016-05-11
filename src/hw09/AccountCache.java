@@ -15,6 +15,7 @@ public class AccountCache {
 
     // get the current cache account value
     public int peek() {
+        isRead = true;
         return this.current_value;
     }
 
@@ -46,6 +47,12 @@ public class AccountCache {
         return true;
     }
 
+    // update cache value
+    public void update_cache(int updated_value) {
+        isWritten = true;
+        this.current_value = updated_value;
+    }
+
     // update account to new value if writing is required
     public void update() {
         if (isWritten) {
@@ -53,8 +60,4 @@ public class AccountCache {
         }
     }
 
-    public void update_cache(int updated_value) {
-        isWritten = true;
-        this.current_value = updated_value;
-    }
 }
