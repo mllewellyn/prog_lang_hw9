@@ -8,7 +8,8 @@ class MultiThreadedServerTask implements Runnable {
     private static final int Z = constants.Z;
     private static final int numLetters = constants.numLetters;
 
-    private Account[] accounts;
+    private AccountCache[] account_caches;
+    private Account[] allAccounts;
     private String transaction;
 
     // TO DO: The sequential version of Task peeks at accounts
@@ -21,7 +22,8 @@ class MultiThreadedServerTask implements Runnable {
     // (3) perform all updates, and (4) close all opened accounts.
 
     public MultiThreadedServerTask(Account[] allAccounts, String trans) {
-        accounts = allAccounts;
+        account_caches = new AccountCache[allAccounts.length];
+        this.allAccounts = allAccounts;
         transaction = trans;
     }
 
@@ -29,20 +31,20 @@ class MultiThreadedServerTask implements Runnable {
     // You probably want to change it to return a reference to an
     // account *cache* instead.
     //
-    private Account parseAccount(String name) {
+    private AccountCache parseAccount(String name) {
         int accountNum = (int) (name.charAt(0)) - (int) 'A';
 
         if (accountNum < A || accountNum > Z)
             throw new InvalidTransactionError();
 
-        Account a = accounts[accountNum];
+        AccountCache a = account_caches[accountNum];
 
         for (int i = 1; i < name.length(); i++) {
             if (name.charAt(i) != '*')
                 throw new InvalidTransactionError();
 
-            accountNum = (accounts[accountNum].peek() % numLetters);
-            a = accounts[accountNum];
+            accountNum = (account_caches[accountNum].peek() % numLetters);
+            a = account_caches[accountNum];
         }
 
         return a;
@@ -56,7 +58,13 @@ class MultiThreadedServerTask implements Runnable {
         }
     }
 
-    public void run() {
+    private void load_accounts_into_cache() {
+        for(int i=0; i < allAccounts.length; i++) {
+            account_caches[i] = new AccountCache(allAccounts[i]);
+        }
+    }
+
+    private void execute_transaction_on_cache() {
         // tokenize transaction
         String[] commands = transaction.split(";");
 
@@ -66,7 +74,7 @@ class MultiThreadedServerTask implements Runnable {
             if (words.length < 3)
                 throw new InvalidTransactionError();
 
-            Account lhs = parseAccount(words[0]);
+            AccountCache lhs = parseAccount(words[0]);
 
             if (!words[1].equals("="))
                 throw new InvalidTransactionError();
@@ -81,16 +89,53 @@ class MultiThreadedServerTask implements Runnable {
                 else
                     throw new InvalidTransactionError();
             }
+        }
+    }
 
+    public void run() {
+        while(true) {
+            // First thing we do is load the latest values of the accounts
+            // into the caches
+            load_accounts_into_cache();
+
+            // now we execute the transaction on the cache
+            execute_transaction_on_cache();
+
+            // now we need to try and open the accounts the transaction needed
             try {
-                lhs.open(true);
+                for (AccountCache account_cache : account_caches) {
+                    account_cache.open_if_needed();
+                }
             } catch (TransactionAbortException e) {
-                // won't happen in sequential version
+                // One of the accounts we wanted to open is currently open
+                // fail and go back to the beginning
+                continue;
             }
 
-            lhs.update(rhs);
-            lhs.close();
+            // now that we've opened everythign we need to we want to verify the
+            // contents of the accounts are what we expected when we cached them
+            try {
+                for (AccountCache account_cache : account_caches) {
+                    account_cache.verify();
+                }
+            } catch (TransactionAbortException e) {
+                // One of the accounts we wanted to open is currently open
+                // fail and go back to the beginning
+                continue;
+            }
+
+            // We have all the needed accounts open and they have the correct contents
+            // now we update and close them
+            for (AccountCache account_cache : account_caches) {
+                account_cache.update();
+                account_cache.close();
+            }
+
+            // Everything worked! Print a message and break out of the while(true)
+            System.out.println("commit: " + transaction);
+            break;
         }
-        System.out.println("commit: " + transaction);
+
+
     }
 }

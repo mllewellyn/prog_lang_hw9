@@ -121,7 +121,7 @@ public class MultithreadedServer {
         ExecutorService exec = Executors.newFixedThreadPool(numThreads);
 
         while ((line = input.readLine()) != null) {
-            Task t = new Task(accounts, line);
+            MultiThreadedServerTask t = new MultiThreadedServerTask(accounts, line);
 
             exec.execute(t);
 
