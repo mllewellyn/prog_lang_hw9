@@ -70,6 +70,11 @@ public class MultithreadedServerTests extends TestCase {
 	public void testRotate() throws IOException {
 		verify_results_with_single_threaded_server("src/hw09/data/rotate");
 	}
+
+	@Test
+	public void testStudent() throws IOException {
+		verify_results_with_single_threaded_server("src/hw09/data/student_tests");
+	}
 	 	  	 
 	
 }
