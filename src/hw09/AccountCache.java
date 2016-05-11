@@ -17,13 +17,11 @@ public class AccountCache {
         return this.current_value;
     }
 
-    public void verify() {
-        try {
-            this.act.verify(this.current_value);
-        } catch (TransactionAbortException e) {}
+    public void verify() throws TransactionAbortException {
+        this.act.verify(this.current_value);
     }
 
-    public boolean open_if_needed() {
+    public boolean open_if_needed() throws TransactionAbortException {
         try {
             if (isRead) {
                 this.act.open(false);
@@ -31,9 +29,7 @@ public class AccountCache {
             if (isWritten) {
                 this.act.open(true);
             }
-        } catch (TransactionAbortException e1) {
-            return true;
-        } catch (TransactionUsageError e2) { return false; }
+        } catch (TransactionUsageError e) { return false; }
         return true;
     }
 
