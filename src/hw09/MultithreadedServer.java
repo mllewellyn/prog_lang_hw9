@@ -26,7 +26,6 @@ public class MultithreadedServer {
 
             exec.execute(t);
 
-            //t.run();
         }
 
         exec.shutdown();

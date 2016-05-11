@@ -99,7 +99,7 @@ class MultiThreadedServerTask implements Runnable {
         while(true) {
             // First thing we do is load the latest values of the accounts
             // into the caches
-            System.out.println("Loading accounts into cache.");
+//            System.out.println("Loading accounts into cache.");
             load_accounts_into_cache();
 
             // now we execute the transaction on the cache
@@ -118,7 +118,7 @@ class MultiThreadedServerTask implements Runnable {
                 continue;
             }
 
-            // now that we've opened everythign we need to we want to verify the
+            // now that we've opened everything we need to we want to verify the
             // contents of the accounts are what we expected when we cached them
             try {
                 for (AccountCache account_cache : account_caches) {
