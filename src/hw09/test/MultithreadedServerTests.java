@@ -72,8 +72,13 @@ public class MultithreadedServerTests extends TestCase {
 	}
 
 	@Test
+	public void testSmallIncrement() throws IOException {
+		verify_results_with_single_threaded_server("src/hw09/data/small_increment");
+	}
+
+	@Test
 	public void testStudent() throws IOException {
-		verify_results_with_single_threaded_server("src/hw09/data/student_tests");
+		verify_results_with_single_threaded_server("src/hw09/data/student_test");
 	}
 	 	  	 
 	

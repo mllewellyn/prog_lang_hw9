@@ -85,7 +85,10 @@ class MultiThreadedServerTask implements Runnable {
                     rhs -= parseAccountOrNum(words[j + 1]);
                 else
                     throw new InvalidTransactionError();
+
             }
+
+            lhs.update_cache(rhs);
         }
     }
 
@@ -131,7 +134,11 @@ class MultiThreadedServerTask implements Runnable {
 
             // We have all the needed accounts open and they have the correct contents
             // now we update and close them
-            for (AccountCache account_cache : account_caches) {
+            for (int i = A; i <= Z; i++) {
+                Character c = new Character((char) (i+'A'));
+                AccountCache account_cache = account_caches[i];
+                System.out.println("Trying to update account "+c);
+
                 account_cache.update();
                 account_cache.close_if_open();
             }
