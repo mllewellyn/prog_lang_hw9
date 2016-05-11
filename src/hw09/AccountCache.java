@@ -13,14 +13,19 @@ public class AccountCache {
         this.current_value = this.initial_value;
     }
 
+    // get the current cache account value
     public int peek() {
         return this.current_value;
     }
 
+    // verify the account with the current value
     public void verify() throws TransactionAbortException {
-        this.act.verify(this.current_value);
+        if (isRead) {
+            this.act.verify(this.current_value);
+        }
     }
 
+    // open account to read or write as necessary
     public boolean open_if_needed() throws TransactionAbortException {
         try {
             if (isRead) {
@@ -33,6 +38,7 @@ public class AccountCache {
         return true;
     }
 
+    // close account if open
     public boolean close_if_open() {
         try {
             this.act.close();
@@ -40,6 +46,7 @@ public class AccountCache {
         return true;
     }
 
+    // update account to new value if writing is required
     public void update() {
         if (isWritten) {
             this.act.update(this.current_value);
