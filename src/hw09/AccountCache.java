@@ -21,7 +21,7 @@ public class AccountCache {
         //this.act.verify(this.current_value);
     }
 
-    public boolean openAsNeeded() {
+    public boolean open_if_needed() {
         try {
             if (isRead) {
                 //open for reading
@@ -29,13 +29,13 @@ public class AccountCache {
             if (isWritten) {
                 //open for writing
             }
-        } catch (TransactionUsageError e1) {
+        } catch (TransactionUsageError e) {
             return false;
         }
         return true;
     }
 
-    public void closeIfOpened() {
+    public void close() {
 
     }
 

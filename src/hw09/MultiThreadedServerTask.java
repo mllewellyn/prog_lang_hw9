@@ -1,8 +1,5 @@
 package hw09;
 
-/**
- * Created by mllewellyn on 5/5/16.
- */
 class MultiThreadedServerTask implements Runnable {
     private static final int A = constants.A;
     private static final int Z = constants.Z;
