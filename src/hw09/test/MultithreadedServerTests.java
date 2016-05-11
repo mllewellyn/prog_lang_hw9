@@ -31,27 +31,45 @@ public class MultithreadedServerTests extends TestCase {
 	       accounts[i].printMod();
 	       System.out.print(")\n");
 	    }
-	 }    
-     
-        
-     @Test
-	 public void testIncrement() throws IOException {
-	
-		// initialize accounts 
+	 }
+
+	Account[] initialize_accounts() {
 		accounts = new Account[numLetters];
 		for (int i = A; i <= Z; i++) {
 			accounts[i] = new Account(Z-i);
-		}			 
-		
+		}
+		return accounts;
+	}
+
+	private void verify_results_with_single_threaded_server(String test_file) throws IOException {
+		Account[] multi_accounts = initialize_accounts();
+		Account[] single_accounts = initialize_accounts();
+		MultithreadedServer.runServer(test_file, multi_accounts);
+		SinglethreadedServer.runServer(test_file, single_accounts);
+
+		for (int i = A; i <= Z; i++) {
+			Character c = new Character((char) (i+'A'));
+			assertEquals("Account "+c+" differs", single_accounts[i].getValue(), multi_accounts[i].getValue());
+		}
+	}
+
+     @Test
+	 public void testIncrement() throws IOException {
+		accounts = initialize_accounts();
 		MultithreadedServer.runServer("src/hw09/data/increment", accounts);
 	
 		// assert correct account values
 		for (int i = A; i <= Z; i++) {
 			Character c = new Character((char) (i+'A'));
-			assertEquals("Account "+c+" differs",Z-i+1,accounts[i].getValue());
+			assertEquals("Account "+c+" differs", Z-i+1, accounts[i].getValue());
 		}		
 
 	 }
+
+	@Test
+	public void testRotate() throws IOException {
+		verify_results_with_single_threaded_server("src/hw09/data/rotate");
+	}
 	 	  	 
 	
 }
