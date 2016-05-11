@@ -7,6 +7,7 @@ public class AccountCache {
     boolean isRead = false;
     boolean isWritten = false;
 
+    // initialize AccountCache
     public AccountCache(Account act) {
         this.act = act;
         this.initial_value = act.peek();
@@ -22,7 +23,7 @@ public class AccountCache {
     // verify the account with the current value
     public void verify() throws TransactionAbortException {
         if (isRead) {
-            this.act.verify(this.current_value);
+            this.act.verify(this.initial_value);
         }
     }
 

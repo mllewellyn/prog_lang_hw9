@@ -116,7 +116,7 @@ class MultiThreadedServerTask implements Runnable {
                 continue;
             }
 
-            // now that we've opened everythign we need to we want to verify the
+            // now that we've opened everything we need to we want to verify the
             // contents of the accounts are what we expected when we cached them
             try {
                 for (AccountCache account_cache : account_caches) {
@@ -134,7 +134,7 @@ class MultiThreadedServerTask implements Runnable {
             for (int i = A; i <= Z; i++) {
                 Character c = new Character((char) (i+'A'));
                 AccountCache account_cache = account_caches[i];
-                System.out.println("Trying to update account "+c);
+//                System.out.println("Trying to update account "+c);
 
                 account_cache.update();
                 account_cache.close_if_open();

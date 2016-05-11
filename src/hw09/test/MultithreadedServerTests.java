@@ -41,9 +41,29 @@ public class MultithreadedServerTests extends TestCase {
 		return accounts;
 	}
 
+	Account[] initialize_accounts2() {
+		accounts = new Account[numLetters];
+		for (int i = A; i <= Z; i++) {
+			accounts[i] = new Account(Z*3 - i*2);
+		}
+		return accounts;
+	}
+
 	private void verify_results_with_single_threaded_server(String test_file) throws IOException {
 		Account[] multi_accounts = initialize_accounts();
 		Account[] single_accounts = initialize_accounts();
+		MultithreadedServer.runServer(test_file, multi_accounts);
+		SinglethreadedServer.runServer(test_file, single_accounts);
+
+		for (int i = A; i <= Z; i++) {
+			Character c = new Character((char) (i+'A'));
+			assertEquals("Account "+c+" differs", single_accounts[i].getValue(), multi_accounts[i].getValue());
+		}
+	}
+
+	private void verify_results2(String test_file) throws IOException {
+		Account[] multi_accounts = initialize_accounts2();
+		Account[] single_accounts = initialize_accounts2();
 		MultithreadedServer.runServer(test_file, multi_accounts);
 		SinglethreadedServer.runServer(test_file, single_accounts);
 
@@ -85,6 +105,39 @@ public class MultithreadedServerTests extends TestCase {
 	public void testStudent() throws IOException {
 		verify_results_with_single_threaded_server("src/hw09/data/student_test");
 	}
-	 	  	 
-	
+
+
+	@Test
+	public void testIncrement2() throws IOException {
+		accounts = initialize_accounts2();
+		MultithreadedServer.runServer("src/hw09/data/increment", accounts);
+
+		// assert correct account values
+		for (int i = A; i <= Z; i++) {
+			Character c = new Character((char) (i+'A'));
+			assertEquals("Account "+c+" differs", Z-i+1, accounts[i].getValue());
+		}
+
+	}
+
+	@Test
+	public void testTinyRotate2() throws IOException {
+		verify_results2("src/hw09/data/tiny_rotate");
+	}
+
+	@Test
+	public void testRotate2() throws IOException {
+		verify_results2("src/hw09/data/rotate");
+	}
+
+	@Test
+	public void testSmallIncrement2() throws IOException {
+		verify_results2("src/hw09/data/small_increment");
+	}
+
+	@Test
+	public void testStudent2() throws IOException {
+		verify_results2("src/hw09/data/student_test");
+	}
+
 }
