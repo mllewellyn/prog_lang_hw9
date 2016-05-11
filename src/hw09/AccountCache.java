@@ -9,27 +9,41 @@ public class AccountCache {
 
     public AccountCache(Account act) {
         this.act = act;
-        initial_value = act.peek();
+        this.initial_value = act.peek();
+        this.current_value = this.initial_value;
     }
 
-    public void verify() {
-
+    public int peek() {
+        return this.current_value;
     }
 
-    public void openAsNeeded() {
-
+    public void verify() throws TransactionAbortException {
+        this.act.verify(this.current_value);
     }
 
-    public void closeAccount() {
-
+    public boolean open_if_needed() throws TransactionAbortException {
+        try {
+            if (isRead) {
+                this.act.open(false);
+            }
+            if (isWritten) {
+                this.act.open(true);
+            }
+        } catch (TransactionUsageError e) { return false; }
+        return true;
     }
 
-    public void update(int new_value) {
-        this.current_value = new_value;
+    public boolean close_if_open() {
+        try {
+            this.act.close();
+        } catch (TransactionUsageError e) { return false; }
+        return true;
     }
 
-    public void updateAccount() {
-        this.act.update(this.current_value);
+    public void update() {
+        if (isWritten) {
+            this.act.update(this.current_value);
+        }
     }
 
 

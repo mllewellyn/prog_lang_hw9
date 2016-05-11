@@ -1,8 +1,5 @@
 package hw09;
 
-/**
- * Created by mllewellyn on 5/5/16.
- */
 class MultiThreadedServerTask implements Runnable {
     private static final int A = constants.A;
     private static final int Z = constants.Z;
@@ -136,7 +133,7 @@ class MultiThreadedServerTask implements Runnable {
             // now we update and close them
             for (AccountCache account_cache : account_caches) {
                 account_cache.update();
-                account_cache.close();
+                account_cache.close_if_open();
             }
 
             // Everything worked! Print a message and break out of the while(true)
