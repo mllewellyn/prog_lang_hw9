@@ -132,9 +132,10 @@ class MultiThreadedServerTask implements Runnable {
             // We have all the needed accounts open and they have the correct contents
             // now we update and close them
             for (int i = A; i <= Z; i++) {
-                Character c = new Character((char) (i+'A'));
+//                Character c = new Character((char) (i+'A'));
+//                System.out.println("Trying to update account "+c);
                 AccountCache account_cache = account_caches[i];
-                System.out.println("Trying to update account "+c);
+
 
                 account_cache.update();
                 account_cache.close_if_open();
