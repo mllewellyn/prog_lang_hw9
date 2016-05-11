@@ -99,6 +99,7 @@ class MultiThreadedServerTask implements Runnable {
         while(true) {
             // First thing we do is load the latest values of the accounts
             // into the caches
+            System.out.println("Loading accounts into cache.");
             load_accounts_into_cache();
 
             // now we execute the transaction on the cache
@@ -110,19 +111,21 @@ class MultiThreadedServerTask implements Runnable {
                     account_cache.open_if_needed();
                 }
             } catch (TransactionAbortException e) {
+                System.out.println("Failed to open an account");
                 // One of the accounts we wanted to open is currently open
                 // fail and go back to the beginning
                 close_accounts();
                 continue;
             }
 
-            // now that we've opened everything we need to we want to verify the
+            // now that we've opened everythign we need to we want to verify the
             // contents of the accounts are what we expected when we cached them
             try {
                 for (AccountCache account_cache : account_caches) {
                     account_cache.verify();
                 }
             } catch (TransactionAbortException e) {
+                System.out.println("Failed to verify an account");
                 // One of the accounts we wanted to open is currently open
                 // fail and go back to the beginning
                 close_accounts();
@@ -132,9 +135,9 @@ class MultiThreadedServerTask implements Runnable {
             // We have all the needed accounts open and they have the correct contents
             // now we update and close them
             for (int i = A; i <= Z; i++) {
-                Character c = new Character((char) (i+'A'));
-                AccountCache account_cache = account_caches[i];
+//                Character c = new Character((char) (i+'A'));
 //                System.out.println("Trying to update account "+c);
+                AccountCache account_cache = account_caches[i];
 
                 account_cache.update();
                 account_cache.close_if_open();
