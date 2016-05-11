@@ -92,6 +92,12 @@ class MultiThreadedServerTask implements Runnable {
         }
     }
 
+    private void close_accounts() {
+        for (AccountCache account_cache : account_caches) {
+            account_cache.close_if_open();
+        }
+    }
+
     public void run() {
         while(true) {
             // First thing we do is load the latest values of the accounts
@@ -109,6 +115,7 @@ class MultiThreadedServerTask implements Runnable {
             } catch (TransactionAbortException e) {
                 // One of the accounts we wanted to open is currently open
                 // fail and go back to the beginning
+                close_accounts();
                 continue;
             }
 
@@ -121,6 +128,7 @@ class MultiThreadedServerTask implements Runnable {
             } catch (TransactionAbortException e) {
                 // One of the accounts we wanted to open is currently open
                 // fail and go back to the beginning
+                close_accounts();
                 continue;
             }
 
