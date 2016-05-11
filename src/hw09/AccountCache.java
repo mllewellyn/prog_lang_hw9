@@ -9,22 +9,38 @@ public class AccountCache {
 
     public AccountCache(Account act) {
         this.act = act;
-        initial_value = act.peek();
+        this.initial_value = act.peek();
+        this.current_value = this.initial_value;
+    }
+
+    public int getVal() {
+        return this.current_value;
     }
 
     public void verify() {
-
+        //this.act.verify(this.current_value);
     }
 
-    public void openAsNeeded() {
-
+    public boolean openAsNeeded() {
+        try {
+            if (isRead) {
+                //open for reading
+            }
+            if (isWritten) {
+                //open for writing
+            }
+        } catch (TransactionUsageError e1) {
+            return false;
+        }
+        return true;
     }
 
-    public void closeAccount() {
+    public void closeIfOpened() {
 
     }
 
     public void update(int new_value) {
+        isWritten = true;
         this.current_value = new_value;
     }
 
