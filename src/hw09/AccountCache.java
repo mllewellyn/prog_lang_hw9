@@ -60,9 +60,9 @@ public class AccountCache {
     }
 
     // update account to new value if writing is required
-    public void update() {
+    public void update_if_needed() {
         if (isWritten) {
-            this.act.update(this.current_value);
+            act.update(current_value);
         }
     }
 

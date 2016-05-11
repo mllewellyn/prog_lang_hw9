@@ -107,7 +107,11 @@ class MultiThreadedServerTask implements Runnable {
 
             // now we need to try and open the accounts the transaction needed
             try {
-                for (AccountCache account_cache : account_caches) {
+                for (int i = A; i <= Z; i++) {
+//                    Character c = new Character((char) (i+'A'));
+//                    System.out.println("Trying to open account "+c);
+
+                    AccountCache account_cache = account_caches[i];
                     account_cache.open_if_needed();
                 }
             } catch (TransactionAbortException e) {
@@ -139,7 +143,7 @@ class MultiThreadedServerTask implements Runnable {
 //                System.out.println("Trying to update account "+c);
                 AccountCache account_cache = account_caches[i];
 
-                account_cache.update();
+                account_cache.update_if_needed();
                 account_cache.close_if_open();
             }
 

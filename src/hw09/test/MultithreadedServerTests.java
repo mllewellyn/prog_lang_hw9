@@ -20,7 +20,7 @@ public class MultithreadedServerTests extends TestCase {
     private static Account[] accounts;
 
 	// make this "" on the hw server, "src/" on local machines
-	private static final String TEST_FILE_PREFIX = "src/";
+	private static final String TEST_FILE_PREFIX = "";
             
     protected static void dumpAccounts() {
 	    // output values:
