@@ -13,39 +13,41 @@ public class AccountCache {
         this.current_value = this.initial_value;
     }
 
-    public int getVal() {
+    public int peek() {
         return this.current_value;
     }
 
     public void verify() {
-        //this.act.verify(this.current_value);
+        try {
+            this.act.verify(this.current_value);
+        } catch (TransactionAbortException e) {}
     }
 
     public boolean open_if_needed() {
         try {
             if (isRead) {
-                //open for reading
+                this.act.open(false);
             }
             if (isWritten) {
-                //open for writing
+                this.act.open(true);
             }
-        } catch (TransactionUsageError e) {
-            return false;
-        }
+        } catch (TransactionAbortException e1) {
+            return true;
+        } catch (TransactionUsageError e2) { return false; }
         return true;
     }
 
-    public void close() {
-
+    public boolean close_if_open() {
+        try {
+            this.act.close();
+        } catch (TransactionUsageError e) { return false; }
+        return true;
     }
 
-    public void update(int new_value) {
-        isWritten = true;
-        this.current_value = new_value;
-    }
-
-    public void updateAccount() {
-        this.act.update(this.current_value);
+    public void update() {
+        if (isWritten) {
+            this.act.update(this.current_value);
+        }
     }
 
 
