@@ -1,15 +1,9 @@
 package hw09;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.concurrent.*;
-
-// TO DO: Task is currently an ordinary class.
-// You will need to modify it to make it a task,
-// so it can be given to an Executor thread pool.
-//
-class Task implements Runnable {
+/**
+ * Created by mllewellyn on 5/5/16.
+ */
+class MultiThreadedServerTask implements Runnable {
     private static final int A = constants.A;
     private static final int Z = constants.Z;
     private static final int numLetters = constants.numLetters;
@@ -26,11 +20,11 @@ class Task implements Runnable {
     // writing, or both, (2) verify all previously peeked-at values,
     // (3) perform all updates, and (4) close all opened accounts.
 
-    public Task(Account[] allAccounts, String trans) {
+    public MultiThreadedServerTask(Account[] allAccounts, String trans) {
         accounts = allAccounts;
         transaction = trans;
     }
-    
+
     // TO DO: parseAccount currently returns a reference to an account.
     // You probably want to change it to return a reference to an
     // account *cache* instead.
@@ -98,40 +92,5 @@ class Task implements Runnable {
             lhs.close();
         }
         System.out.println("commit: " + transaction);
-    }
-}
-
-public class MultithreadedServer {
-
-	// requires: accounts != null && accounts[i] != null (i.e., accounts are properly initialized)
-	// modifies: accounts
-	// effects: accounts change according to transactions in inputFile
-    public static void runServer(String inputFile, Account accounts[])
-        throws IOException {
-
-        // read transactions from input file
-        String line;
-        BufferedReader input =
-            new BufferedReader(new FileReader(inputFile));
-
-        // TO DO: you will need to create an Executor and then modify the
-        // following loop to feed tasks to the executor instead of running them
-        // directly.
-        int numThreads = 4;
-        ExecutorService exec = Executors.newFixedThreadPool(numThreads);
-
-        while ((line = input.readLine()) != null) {
-            Task t = new Task(accounts, line);
-
-            exec.execute(t);
-
-            //t.run();
-        }
-        exec.shutdown();
-        try {
-            exec.awaitTermination(60,TimeUnit.SECONDS);
-        } catch(InterruptedException e) {}
-        
-        input.close();
     }
 }
